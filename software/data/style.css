@@ -1,0 +1,32 @@
+html, body {
+  color: #111111; font-family: Arial, ui-sans-serif, sans-serif; font-size: 1em; background-color: #ffffff;
+}
+
+#list > div {
+  margin: 0 0 0 0;
+}
+
+/* Used in list of files in files.htm */
+#file_list > div {
+  margin: 0 0 0.5rem 0;
+}
+
+/* Used in ' delete ' button in files.htm */
+.deleteFile {
+    margin: 0 0 0 0;
+    background-color: #000000;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.deleteFile:hover {
+    margin: 0 0 0 0;
+    background-color: #ff0000;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* a { color: inherit; cursor: pointer; } */
+a { cursor: pointer; }
+

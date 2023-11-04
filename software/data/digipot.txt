@@ -1,0 +1,8 @@
+300 ; digital potmeter will be set again after this time period in seconds
+0   ; ditial potmeter value to set when 0 A exported current
+16  ; 1 A
+24  ; 2 A
+33  ; 3 A
+46  ; 4 A
+63  ; 5 A or above
+

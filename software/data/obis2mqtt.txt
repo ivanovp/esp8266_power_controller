@@ -1,0 +1,27 @@
+0 ; global flag: 1=replace start, 2=remove unit, 4=publish all, 8=show all
+1-0:1.7.0,importPower,Imported power,2 ; OBIS code, MQTT topic, human readable string, flag: 1=unused, 2=remove unit, 4=do not publish, 8=do not show on index.htm
+1-0:2.7.0,exportPower,Exported power,2
+1-0:32.7.0,voltageL1,Voltage L1,2
+1-0:52.7.0,voltageL2,Voltage L2,2
+1-0:72.7.0,voltageL3,Voltage L3,2
+1-0:31.7.0,currentL1,Current L1,2
+1-0:51.7.0,currentL2,Current L2,2
+1-0:71.7.0,currentL3,Current L3,2
+1-0:1.8.0,totalImportedEnergy,Total imported active energy,2
+1-0:2.8.0,totalExportedEnergy,Total exported active energy,2
+1-0:15.8.0,totalAbsoluteEnergy,Total absolute active energy,2
+1-0:3.8.0,totalImportedReactiveEnergy,Total imported reactive energy,2
+1-0:4.8.0,totalExportedReactiveEnergy,Total exported reactive energy,2
+1-0:5.8.0,totalImportedInductiveEnergy,Total imported inductive reactive energy (Q1),2
+1-0:6.8.0,totalImportedCapacitiveEnergy,Total imported capacitive reactive energy (Q2),2
+1-0:7.8.0,totalExportedInductiveEnergy,Total exported inductive reactive energy (Q3),2
+1-0:8.8.0,totalExportedCapacitiveEnergy,Total exported capacitive reactive energy (Q4),2
+1-0:5.7.0,importedInductiveEnergy,Imported inductive reactive energy (Q1),2
+1-0:6.7.0,importedCapacitiveEnergy,Imported capacitive reactive energy (Q2),2
+1-0:7.7.0,exportedInductiveEnergy,Exported inductive reactive energy (Q3),2
+1-0:8.7.0,exportedCapacitiveEnergy,Exported capacitive reactive energy (Q4),2
+1-0:13.7.0,powerFactor,Power factor,0
+1-0:33.7.0,powerFactorL1,Power factor L1,0
+1-0:53.7.0,powerFactorL2,Power factor L2,0
+1-0:73.7.0,powerFactorL3,Power factor L3,0
+1-0:14.7.0,frequency,Frequency,2

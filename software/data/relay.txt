@@ -1,0 +1,5 @@
+1-0:1.7.0   ; OBIS code of import power
+1-0:31.7.0  ; OBIS code of actual current
+1           ; minimum current in Ampers necessary to switch on relay
+0.01        ; import power threshold in kW
+18000       ; relay cooldown time in milliseconds
