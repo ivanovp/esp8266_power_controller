@@ -45,7 +45,7 @@
 /* 0: Individual GPIO pins are used to set set digital potentiometer */
 #define ENABLE_POWER_METER_DIGI_POT_SR      1
 
-#define POWER_METER_DIGI_POT_BITS           6
+#define POWER_METER_DIGI_POT_BITS           6       /* Number of optotriacs */
 #define POWER_METER_DIGI_POT_MIN            0
 #define POWER_METER_DIGI_POT_MAX            ((1u << POWER_METER_DIGI_POT_BITS) - 1u)
 
