@@ -27,13 +27,15 @@
 // need a WebServer for http access on port 80.
 extern ESP8266WebServer httpServer;
 
+extern String hostname;
+
 extern WiFiClient wifiClient;
+#if ENABLE_MQTT_CLIENT
 extern PubSubClient mqttClient;
 
 extern uint32_t mqtt_connect_start_time;
 extern uint32_t mqtt_publish_start_time;
 extern uint32_t mqtt_publish_interval_sec;
-extern String hostname;
 extern String mqttTopicPrefix;
 #if TEMPERATURE_SENSOR != SENSOR_NONE
 extern String mqttTopicTemperature;
@@ -44,6 +46,7 @@ extern String mqttTopicHumidity;
 #if PRESSURE_SENSOR != SENSOR_NONE
 extern String mqttTopicPressure;
 #endif
+#endif /* ENABLE_MQTT_CLIENT */
 
 extern void setLed(bool_t on=TRUE);
 extern void setLed2(bool_t on=TRUE);

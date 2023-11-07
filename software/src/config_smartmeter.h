@@ -17,8 +17,9 @@
 
 #define HW_TYPE                 HW_TYPE_WEMOS_D1_MINI
 
-#define ENABLE_FIRMWARE_UPDATE  1
-#define ENABLE_RESET            1
+#define ENABLE_MQTT_CLIENT      0   /* 1: enable MQTT client, 0: disable MQTT client */
+#define ENABLE_FIRMWARE_UPDATE  1   /* 1: enable firmware update through HTTP, 0: disable firmware update */
+#define ENABLE_RESET            1   /* 1: enable reset through HTTP, 0: disable reset */
 
 /* 1: Enable power metering through serial input */
 /*    Standard: DSMR (Dutch Smart Meter Requirements) */
@@ -74,8 +75,7 @@
 #endif
 
 /* Maximum current consumption in Ampers */
-/* This defines the number of lines in digipot.txt! */
-#define POWER_METER_DIGI_POT_MAX_CURRENT_A  5
+#define POWER_METER_DIGI_POT_MAX_CURRENT_A  25
 #endif
 #endif
 

@@ -61,6 +61,7 @@ uint32_t relay_cooldown_timestamp_ms = 0;
 
 float    import_power_kW = 0.0f;
 uint16_t current_A = 0;
+uint16_t max_current_A = POWER_METER_DIGI_POT_MAX_CURRENT_A;
 
 #if ENABLE_POWER_METER_DIGI_POT
 uint8_t power_meter_digi_pot_value = POWER_METER_DIGI_POT_MAX;
@@ -186,18 +187,22 @@ void power_meter_lcd_printf(uint8_t text_x, uint8_t text_y, const char *fmt, ...
  */
 void power_meter_switch_relay(bool_t on)
 {
+#if ENABLE_MQTT_CLIENT
     String   mqttTopic;
     boolean  ok;
     String   mqttMsg;
 
     mqttTopic = mqttTopicPrefix + "relay";
+#endif
     if (on)
     {
 #if ENABLE_POWER_METER_RELAY_DEBUG
         TRACE("Switching relay ON\n");
 #endif
         digitalWrite(POWER_METER_RELAY_PIN, HIGH);
+#if ENABLE_MQTT_CLIENT
         mqttMsg = "1";
+#endif
     }
     else
     {
@@ -205,9 +210,12 @@ void power_meter_switch_relay(bool_t on)
         TRACE("Switching relay OFF\n");
 #endif
         digitalWrite(POWER_METER_RELAY_PIN, LOW);
+#if ENABLE_MQTT_CLIENT
         mqttMsg = "0";
+#endif
     }
 
+#if ENABLE_MQTT_CLIENT
     if (mqttClient.connected())
     {
         ok = mqttClient.publish(mqttTopic.c_str(), mqttMsg.c_str());
@@ -217,6 +225,7 @@ void power_meter_switch_relay(bool_t on)
         }
         TRACE("Publish %s, %s\n", mqttTopic.c_str(), mqttMsg.c_str());
     }
+#endif
 
     /* Draw new text */
     power_meter_lcd_printf(0, 0, on ? "ON " : "OFF");
@@ -320,11 +329,13 @@ void power_meter_set_sr(uint8_t value)
  */
 void power_meter_set_digi_pot(uint8_t value)
 {
+#if ENABLE_MQTT_CLIENT
     String   mqttTopic;
     boolean  ok;
     String   mqttMsg;
 
     mqttTopic = mqttTopicPrefix + "digiPot";
+#endif
     if (value <= POWER_METER_DIGI_POT_MAX)
     {
         TRACE("Setting power controller's digital potentiometer to %i (max. %i)\n", value, POWER_METER_DIGI_POT_MAX);
@@ -397,6 +408,7 @@ void power_meter_set_digi_pot(uint8_t value)
     /* Draw new text */
     power_meter_lcd_printf(0, 1, "dp:%-2i", value);
 
+#if ENABLE_MQTT_CLIENT
     if (mqttClient.connected())
     {
         mqttMsg = String(value);
@@ -407,6 +419,7 @@ void power_meter_set_digi_pot(uint8_t value)
         }
         TRACE("Publish %s, %s\n", mqttTopic.c_str(), mqttMsg.c_str());
     }
+#endif
 }
 
 /**
@@ -428,28 +441,28 @@ void power_meter_digi_pot_task()
                 || power_meter_digi_pot_value == POWER_METER_DIGI_POT_MIN) // or when digital potmeter is set to zero (~0A is used!)
             {
                 power_meter_digi_pot_recalculate = FALSE;
-                if (current_A < POWER_METER_DIGI_POT_MAX_CURRENT_A)
+                if (current_A < max_current_A)
                 {
                     /* Only need to re-calculate if not at max. current */
                     power_meter_digi_pot_timestamp_ms = millis();
                     power_meter_digi_pot_value = power_meter_digi_pot_table[current_A];
 #if ENABLE_POWER_METER_RELAY_DEBUG
-                    FILE_TRACE("Actual current (%i A) is below or equal to maximum current (%i A)\n", current_A, POWER_METER_DIGI_POT_MAX_CURRENT_A);
+                    FILE_TRACE("Actual current (%i A) is below or equal to maximum current (%i A)\n", current_A, max_current_A);
 #endif
                 }
                 else
                 {
                     power_meter_digi_pot_timestamp_ms = 0;
-                    power_meter_digi_pot_value = power_meter_digi_pot_table[POWER_METER_DIGI_POT_MAX_CURRENT_A];
+                    power_meter_digi_pot_value = power_meter_digi_pot_table[max_current_A];
 #if ENABLE_POWER_METER_RELAY_DEBUG
-                    FILE_TRACE("Actual current (%i A) is over maximum current (%i A)!\n", current_A, POWER_METER_DIGI_POT_MAX_CURRENT_A);
+                    FILE_TRACE("Actual current (%i A) is over maximum current (%i A)!\n", current_A, max_current_A);
 #endif
                 }
             }
             if (power_meter_digi_pot_timestamp_ms != 0
                 && power_meter_digi_pot_timestamp_ms + power_meter_digi_pot_time_period_ms <= millis()
                 /* No need to recalculate if at maximum current */
-                && power_meter_digi_pot_value < power_meter_digi_pot_table[POWER_METER_DIGI_POT_MAX_CURRENT_A])
+                && power_meter_digi_pot_value < power_meter_digi_pot_table[max_current_A])
             {
                 /* If re-calculation of current is needed, switch off load, */
                 /* so next time we will have the maximum current value and */
@@ -570,6 +583,7 @@ obis_data_t * find_obis_data(String& obis_code)
     return p_obis_data;
 }
 
+#if ENABLE_MQTT_CLIENT
 /**
  * @brief Publish OBIS data via MQTT.
  */
@@ -634,6 +648,7 @@ void publishObisData()
         }
     }
 }
+#endif /* ENABLE_MQTT_CLIENT */
 
 /**
  * @brief Processes OBIS codes coming from the smart meter through serial line (RS-232).
@@ -1239,16 +1254,33 @@ void power_meter_init()
         power_meter_digi_pot_time_period_ms = str.toInt() * 1000;
         TRACE("Digital potentiometer time period %i ms\n", power_meter_digi_pot_time_period_ms);
     }
-    for (idx = 0; idx <= POWER_METER_DIGI_POT_MAX_CURRENT_A; idx++)
+    str = readStringFromFile(POWER_METER_DIGI_POT_CONFIG_FILE, 1);
+    if (str.length())
     {
-        str = readStringFromFile(POWER_METER_DIGI_POT_CONFIG_FILE, idx + 1);
+        max_current_A = str.toInt();
+        if (max_current_A >= POWER_METER_DIGI_POT_MAX_CURRENT_A)
+        {
+            ERROR("Invalid maximum current %i A found in %s!\n", max_current_A, POWER_METER_DIGI_POT_CONFIG_FILE);
+            max_current_A = POWER_METER_DIGI_POT_MAX_CURRENT_A;
+        }
+    }
+    TRACE("Maximum current %i A\n", max_current_A);
+    TRACE("Maximum digital potentiometer value %i\n", POWER_METER_DIGI_POT_MAX);
+    for (idx = 0; idx <= max_current_A; idx++)
+    {
+        str = readStringFromFile(POWER_METER_DIGI_POT_CONFIG_FILE, idx + 2);
         if (str.length())
         {
             power_meter_digi_pot_table[idx] = str.toInt();
+            if (power_meter_digi_pot_table[idx] > POWER_METER_DIGI_POT_MAX)
+            {
+                ERROR("Invalid digital potentiometer value %i found in %s!\n",
+                      power_meter_digi_pot_table[idx], POWER_METER_DIGI_POT_CONFIG_FILE);
+                power_meter_digi_pot_table[idx] = POWER_METER_DIGI_POT_MAX;
+            }
         }
     }
-    TRACE("Maximum digital potentiometer value %i\n", POWER_METER_DIGI_POT_MAX);
-    for (idx = 0; idx <= POWER_METER_DIGI_POT_MAX_CURRENT_A; idx++)
+    for (idx = 0; idx <= max_current_A; idx++)
     {
         TRACE("Digital potentiometer value for %i A: %i\n", idx, power_meter_digi_pot_table[idx]);
     }

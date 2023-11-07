@@ -1,4 +1,5 @@
-300 ; digital potmeter will be set again after this time period in seconds
+300 ; recalculation time period in seconds
+5   ; maximum current in Ampers (defines number of lines below!)
 0   ; ditial potmeter value to set when 0 A exported current
 16  ; 1 A
 24  ; 2 A

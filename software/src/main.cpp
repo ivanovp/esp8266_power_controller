@@ -112,13 +112,15 @@ ESP8266WebServer httpServer(HTTP_SERVER_PORT);
 ESP8266HTTPUpdateServer httpUpdater;
 #endif
 
+String hostname;
+
 WiFiClient wifiClient;
+#if ENABLE_MQTT_CLIENT
 PubSubClient mqttClient(wifiClient);
 
 uint32_t mqtt_connect_start_time = 0;
 uint32_t mqtt_publish_start_time = 0;
 uint32_t mqtt_publish_interval_sec = MQTT_PUBLISH_INTERVAL_SEC;
-String hostname;
 String mqttTopicPrefix;
 #if TEMPERATURE_SENSOR != SENSOR_NONE
 String mqttTopicTemperature;
@@ -129,6 +131,7 @@ String mqttTopicHumidity;
 #if PRESSURE_SENSOR != SENSOR_NONE
 String mqttTopicPressure;
 #endif
+#endif /* ENABLE_MQTT_CLIENT */
 
 uint32_t homepage_refresh_interval_sec = DEFAULT_HOMEPAGE_REFRESH_INTERVAL_SEC; /* First line homepage_refresh_interval.txt */
 #if ENABLE_RESET
@@ -845,10 +848,12 @@ protected:
     File m_fsUploadFile;
 };
 
+#if ENABLE_MQTT_CLIENT
 void mqtt_callback(char *topic, byte *payload, unsigned int length)
 {
     TRACE("MQTT callback, topic: %s, payload: %s\n", topic, payload);
 }
+#endif
 
 void i2c_scan()
 {
@@ -1031,6 +1036,7 @@ void setup(void)
         hostname += mac[15];
         hostname += mac[16];
     }
+#if ENABLE_MQTT_CLIENT
     mqttTopicPrefix = "/sensors/" + hostname + "/";
 #if TEMPERATURE_SENSOR != SENSOR_NONE
     mqttTopicTemperature = mqttTopicPrefix + "temperature";
@@ -1041,17 +1047,21 @@ void setup(void)
 #if PRESSURE_SENSOR != SENSOR_NONE
     mqttTopicPressure = mqttTopicPrefix + "pressure";
 #endif
+#endif /* ENABLE_MQTT_CLIENT */
 
     TRACE("Setting WiFi hostname: %s\n", hostname.c_str());
     WiFi.setHostname(hostname.c_str());
     TRACE("WiFi hostname: %s\n", WiFi.getHostname());
 
-    String str = readStringFromFile("/mqtt_publish_interval.txt");
+    String str;
+#if ENABLE_MQTT_CLIENT
+    str = readStringFromFile("/mqtt_publish_interval.txt");
     if (!str.isEmpty())
     {
         mqtt_publish_interval_sec = str.toInt();
         TRACE("Setting measurement interval to %i seconds...\n", mqtt_publish_interval_sec);
     }
+#endif
 
     str = readStringFromFile("/homepage_refresh_interval.txt");
     if (!str.isEmpty())
@@ -1142,13 +1152,16 @@ void setup(void)
     TRACE("HTTPUpdateServer ready at http://%s:%i/update.htm\n", hostname.c_str(), HTTP_SERVER_PORT);
 #endif
 
+#if ENABLE_MQTT_CLIENT
     mqttClient.setServer(MQTT_SERVER, MQTT_SERVERPORT);
     mqttClient.setCallback(mqtt_callback);
 #if ENABLE_POWER_METER
     mqttClient.setBufferSize(1088);
 #endif
+#endif /* ENABLE_MQTT_CLIENT */
 } // setup
 
+#if ENABLE_MQTT_CLIENT
 // Function to connect and reconnect as necessary to the MQTT server.
 // Should be called in the loop function and it will take care of connecting.
 void mqtt_task()
@@ -1204,6 +1217,7 @@ void mqtt_task()
     }
     mqttClient.loop();
 }
+#endif /* ENABLE_MQTT_CLIENT */
 
 // run the server...
 void loop(void)
@@ -1216,7 +1230,9 @@ void loop(void)
 #if ENABLE_FIRMWARE_UPDATE
     MDNS.update();
 #endif
+#if ENABLE_MQTT_CLIENT
     mqtt_task();
+#endif
 #if ENABLE_POWER_METER
     power_meter_task();
 #endif
