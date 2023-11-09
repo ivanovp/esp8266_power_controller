@@ -61,9 +61,9 @@ uint32_t relay_cooldown_timestamp_ms = 0;
 
 float    import_power_kW = 0.0f;
 uint16_t current_A = 0;
-uint16_t max_current_A = POWER_METER_DIGI_POT_MAX_CURRENT_A;
 
 #if ENABLE_POWER_METER_DIGI_POT
+uint16_t max_current_A = POWER_METER_DIGI_POT_MAX_CURRENT_A;
 uint8_t power_meter_digi_pot_value = POWER_METER_DIGI_POT_MAX;
 uint8_t power_meter_digi_pot_table[POWER_METER_DIGI_POT_MAX_CURRENT_A + 1] = { 0xFF };
 uint32_t power_meter_digi_pot_timestamp_ms = 0;
@@ -1286,6 +1286,7 @@ void power_meter_init()
     }
 #if ENABLE_POWER_METER_DIGI_POT_TEST
     power_meter_digi_pot_test();
+#endif /* ENABLE_POWER_METER_DIGI_POT_TEST */
 #endif /* ENABLE_POWER_METER_DIGI_POT */
 #if ENABLE_POWER_METER_RELAY_TEST
     TRACE("Switching relay on for 2 seconds...\n");
@@ -1297,9 +1298,8 @@ void power_meter_init()
     power_meter_lcd_clear_row_and_display(1);
     power_meter_lcd_clear_row_and_display(2);
 #endif /* ENABLE_POWER_METER_RELAY_TEST */
-#if ENABLE_POWER_METER_DIGI_POT
+#if ENABLE_POWER_METER_RELAY && ENABLE_POWER_METER_DIGI_POT
     power_meter_set_digi_pot(power_meter_digi_pot_value);
-#endif /* ENABLE_POWER_METER_DIGI_POT */
-#endif /* ENABLE_POWER_METER_RELAY */
+#endif /* ENABLE_POWER_METER_RELAY && ENABLE_POWER_METER_DIGI_POT */
 }
 #endif

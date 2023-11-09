@@ -29,14 +29,14 @@
 #if ENABLE_POWER_METER
 #define ENABLE_POWER_METER_CRC_CHECK        0
 #define ENABLE_POWER_METER_DEBUG            1
-#define ENABLE_POWER_METER_RELAY            1
-#define ENABLE_POWER_METER_DIGI_POT         1
-#define ENABLE_POWER_METER_REQUEST          0
+#define ENABLE_POWER_METER_RELAY            1   /* 1: control relay, 0: no relay */
+#define ENABLE_POWER_METER_DIGI_POT         1   /* 1: control digital potmeter, 0: no digital potmeter */
+#define ENABLE_POWER_METER_REQUEST          0   /* 1: controler request port of P1, 0: no control */
 
 #if ENABLE_POWER_METER_RELAY
 #define ENABLE_POWER_METER_RELAY_DEBUG      1
 #define ENABLE_POWER_METER_RELAY_TEST       1
-#define ENABLE_POWER_METER_LCD              1
+#define ENABLE_POWER_METER_LCD              1   /* 1: use 64x48 pixel 0.66 inch OLED shield, 0: no display */
 #define POWER_METER_RELAY_PIN               15
 #endif
 #if ENABLE_POWER_METER_DIGI_POT
