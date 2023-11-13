@@ -4,7 +4,7 @@
  * @author      Copyright (C) Peter Ivanov, 2011, 2012, 2013, 2014, 2021, 2023
  *
  * Created      2011-01-19 11:48:53
- * Last modify: 2021-02-16 17:51:49 ivanovp {Time-stamp}
+ * Last modify: 2023-11-13 10:06:26 ivanovp {Time-stamp}
  * Licence:     GPL
  */
 
@@ -31,7 +31,7 @@
 #define ENABLE_POWER_METER_DEBUG            1
 #define ENABLE_POWER_METER_RELAY            1   /* 1: control relay, 0: no relay */
 #define ENABLE_POWER_METER_DIGI_POT         1   /* 1: control digital potmeter, 0: no digital potmeter */
-#define ENABLE_POWER_METER_REQUEST          0   /* 1: controler request port of P1, 0: no control */
+#define ENABLE_POWER_METER_REQUEST          0   /* 1: control request port of P1, 0: no control */
 
 #if ENABLE_POWER_METER_RELAY
 #define ENABLE_POWER_METER_RELAY_DEBUG      1
@@ -51,7 +51,7 @@
 
 #if ENABLE_POWER_METER_DIGI_POT_TEST
 #define POWER_METER_DIGI_POT_TEST_INPUT_PIN 16
-#define ENABLE_POWER_METER_DIGI_POT_TEST_BTN 1  /* Two buttons connected to analog input (A0) */
+#define ENABLE_POWER_METER_DIGI_POT_TEST_BTN 0  /* Two buttons connected to analog input (A0) */
 #endif
 
 #if ENABLE_POWER_METER_DIGI_POT_SR
@@ -75,6 +75,8 @@
 #endif
 
 /* Maximum current consumption in Ampers */
+/* Note: this is the maximum supported current by software */
+/* Controlled heater elements' maximum current is defined in digipot.txt! */
 #define POWER_METER_DIGI_POT_MAX_CURRENT_A  25
 #endif
 #endif
