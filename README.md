@@ -5,8 +5,13 @@ Videos about the controller (currently only in Hungarian).
 
 Introduction:
 https://youtu.be/gTx1W5xfqio
-Schematic and PCB:
+
+Explaining schematic and PCB:
 https://youtu.be/oL1xu2TVqEM
+
+How to configure and upload software:
+https://youtu.be/lelAveujqwc
+
 
 ![ESP8266 power controller](https://github.com/ivanovp/esp8266_power_controller/blob/main/esp8266_power_controller.jpg?raw=true)
 ![PCB of ESP8266 power controller](https://github.com/ivanovp/esp8266_power_controller/blob/main/esp8266_power_controller_pcb.jpg?raw=true)
