@@ -17,5 +17,6 @@ https://youtu.be/UKCy7zpQ2Bw
 
 
 ![ESP8266 power controller](https://github.com/ivanovp/esp8266_power_controller/blob/main/esp8266_power_controller.jpg?raw=true)
+![Cased ESP8266 power controller](https://github.com/ivanovp/esp8266_power_controller/blob/main/esp8266_power_controller_case.jpg?raw=true)
 ![PCB of ESP8266 power controller](https://github.com/ivanovp/esp8266_power_controller/blob/main/esp8266_power_controller_pcb.jpg?raw=true)
 
