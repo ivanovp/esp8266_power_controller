@@ -12,6 +12,9 @@ https://youtu.be/oL1xu2TVqEM
 How to configure and upload software:
 https://youtu.be/lelAveujqwc
 
+Designing 3D printable case:
+https://youtu.be/UKCy7zpQ2Bw
+
 
 ![ESP8266 power controller](https://github.com/ivanovp/esp8266_power_controller/blob/main/esp8266_power_controller.jpg?raw=true)
 ![PCB of ESP8266 power controller](https://github.com/ivanovp/esp8266_power_controller/blob/main/esp8266_power_controller_pcb.jpg?raw=true)
