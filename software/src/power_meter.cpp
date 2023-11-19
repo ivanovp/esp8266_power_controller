@@ -4,7 +4,7 @@
  * @author      Copyright (C) Peter Ivanov, 2011, 2012, 2013, 2014, 2021, 2023
  *
  * Created      2011-01-19 11:48:53
- * Last modify: 2023-09-10 21:35:30 ivanovp {Time-stamp}
+ * Last modify: 2023-11-19 18:16:55 ivanovp {Time-stamp}
  * Licence:     GPL
  */
 
@@ -89,12 +89,7 @@ uint32_t power_meter_request_timestamp_ms = 0;
 #define SCREEN_TEXT_WIDTH   12
 Adafruit_SSD1306 display(SCREEN_WIDTH_INIT, SCREEN_HEIGHT_INIT, &Wire, OLED_RESET);
 #endif /* ENABLE_POWER_METER_LCD */
-#endif /* ENABLE_POWER_METER */
 
-// The text of builtin files are in this header file
-#include "builtinfiles.h"
-
-#if ENABLE_POWER_METER
 
 /**
  * @brief Clear text row on LCD.
@@ -1079,10 +1074,9 @@ void power_meter_digi_pot_test()
             }
             power_meter_set_digi_pot(value);
         }
-#endif
+#endif /* ENABLE_POWER_METER_DIGI_POT_TEST_BTN */
         power_meter_lcd_clear_row_and_display(2);
     }
-#endif /* ENABLE_POWER_METER_DIGI_POT_TEST_BTN */
 #endif /* ENABLE_POWER_METER_DIGI_POT_TEST */
 }
 
@@ -1301,5 +1295,7 @@ void power_meter_init()
 #if ENABLE_POWER_METER_RELAY && ENABLE_POWER_METER_DIGI_POT
     power_meter_set_digi_pot(power_meter_digi_pot_value);
 #endif /* ENABLE_POWER_METER_RELAY && ENABLE_POWER_METER_DIGI_POT */
+#endif /* ENABLE_POWER_METER_RELAY */
 }
-#endif
+#endif /* ENABLE_POWER_METER */
+
