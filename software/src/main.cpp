@@ -1172,7 +1172,7 @@ void mqtt_task()
         {
             TRACE("Connecting to MQTT... ");
 
-            if (mqttClient.connect(hostname.c_str()))
+            if (mqttClient.connect(hostname.c_str(), MQTT_USERNAME, MQTT_PASSWORD))
             {
                 TRACE("Connected to MQTT broker\n");
             }

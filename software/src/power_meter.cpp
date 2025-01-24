@@ -591,7 +591,7 @@ void publishObisData()
     String   data;
     obis_code_to_mqtt_topic_t * p_obis2mqtt;
 
-    if (mqttClient.connected() &&obis_data_publish_idx < obis_data_length)
+    if (mqttClient.connected() && obis_data_publish_idx < obis_data_length)
     {
         idx = obis_data_publish_idx;
 #if ENABLE_POWER_METER_DEBUG >= 3
